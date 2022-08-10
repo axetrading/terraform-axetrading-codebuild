@@ -82,12 +82,12 @@ resource "aws_codebuild_project" "default" {
     buildspec = yamlencode({
       version = "0.2",
       phases = {
-        install = { commands = [
+        install = { commands = (var.role_arn == "" ? [] : [
           "creds=$(aws sts assume-role --role-arn \"${var.role_arn}\" --role-session-name \"${var.name}-code-build\")",
           "export AWS_ACCESS_KEY_ID=$(echo \"$creds\" | jq -r '.Credentials.AccessKeyId')",
           "export AWS_SECRET_ACCESS_KEY=$(echo \"$creds\" | jq -r '.Credentials.SecretAccessKey')",
           "export AWS_SESSION_TOKEN=$(echo \"$creds\" | jq -r '.Credentials.SessionToken')"
-        ] },
+        ]) },
         build = { commands = var.build_commands }
       },
       artifacts = { files = var.file_artifacts }

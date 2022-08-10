@@ -17,6 +17,7 @@ variable "build_commands" {
 variable "role_arn" {
   type        = string
   description = "The ARN of the IAM role to assume for the build"
+  default     = ""
 }
 
 variable "file_artifacts" {
