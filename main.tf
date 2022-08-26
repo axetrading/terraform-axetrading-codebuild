@@ -62,7 +62,7 @@ data "aws_iam_policy_document" "vpc_access" {
   count = var.vpc_config != {} ? 1 : 0
 
   statement {
-    sid = "Allow CodeBuild to use the create/describe VPC Resources"
+    sid = "Allow CodeBuild to use the create and describe VPC Resources"
 
     actions = [
       "ec2:CreateNetworkInterfacePermission",
