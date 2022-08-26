@@ -146,6 +146,9 @@ resource "aws_codebuild_project" "default" {
       group_name = aws_cloudwatch_log_group.default.name
     }
   }
+  depends_on = [
+    aws_iam_role.default
+  ]
 }
 
 resource "aws_cloudwatch_log_group" "default" {
