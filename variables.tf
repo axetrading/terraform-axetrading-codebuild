@@ -25,3 +25,10 @@ variable "file_artifacts" {
   description = "Files to list in the artefacts > files section of the buildspec."
   default     = []
 }
+
+# VPC Config
+variable "vpc_config" {
+  description = "Configuration for the builds to run inside a VPC."
+  type        = any
+  default     = {}
+}

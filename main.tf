@@ -58,6 +58,44 @@ resource "aws_iam_role_policy_attachment" "default" {
   role       = aws_iam_role.default.name
 }
 
+data "aws_iam_policy_document" "vpc_access" {
+  count = var.vpc_config != {} ? 1 : 0
+
+  statement {
+    sid = "CodeBuildVPCAccess"
+
+    actions = [
+      "ec2:CreateNetworkInterfacePermission",
+      "ec2:CreateNetworkInterface",
+      "ec2:DescribeDhcpOptions",
+      "ec2:DescribeNetworkInterfaces",
+      "ec2:DeleteNetworkInterface",
+      "ec2:DescribeSubnets",
+      "ec2:DescribeSecurityGroups",
+      "ec2:DescribeVpcs",
+      "ec2:CreateNetworkInterfacePermission"
+    ]
+
+    resources = [
+      "*",
+    ]
+  }
+}
+
+
+resource "aws_iam_policy" "vpc_access" {
+  count = var.vpc_config != {} ? 1 : 0
+
+  name   = "${var.name}-vpc-access"
+  policy = data.aws_iam_policy_document.vpc_access[0].json
+}
+
+resource "aws_iam_role_policy_attachment" "vpc_access" {
+  count      = var.vpc_config != {} ? 1 : 0
+  policy_arn = aws_iam_policy.vpc_access[0].arn
+  role       = aws_iam_role.default.name
+}
+
 resource "aws_codebuild_project" "default" {
   badge_enabled  = false
   build_timeout  = 20
@@ -94,11 +132,23 @@ resource "aws_codebuild_project" "default" {
     })
   }
 
+  dynamic "vpc_config" {
+    for_each = length(var.vpc_config) > 0 ? [""] : []
+    content {
+      vpc_id             = lookup(var.vpc_config, "vpc_id", null)
+      subnets            = lookup(var.vpc_config, "subnets", null)
+      security_group_ids = lookup(var.vpc_config, "security_group_ids", null)
+    }
+  }
+
   logs_config {
     cloudwatch_logs {
       group_name = aws_cloudwatch_log_group.default.name
     }
   }
+  depends_on = [
+    aws_iam_role.default
+  ]
 }
 
 resource "aws_cloudwatch_log_group" "default" {
