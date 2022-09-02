@@ -9,7 +9,7 @@ not being accessible within a container running Terraform).
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.29.0 |
 
 ## Resources
 
@@ -32,6 +32,11 @@ not being accessible within a container running Terraform).
 |------|-------------|------|---------|:--------:|
 | <a name="input_artifacts_bucket_arn"></a> [artifacts\_bucket\_arn](#input\_artifacts\_bucket\_arn) | ARN of the bucket for storing codepipeline artifacts | `string` | n/a | yes |
 | <a name="input_build_commands"></a> [build\_commands](#input\_build\_commands) | Commands to run in the build phase | `list(any)` | `[]` | no |
+| <a name="input_build_compute_type"></a> [build\_compute\_type](#input\_build\_compute\_type) | Information about the compute resources the build project will use. Valid values: BUILD\_GENERAL1\_SMALL, BUILD\_GENERAL1\_MEDIUM, BUILD\_GENERAL1\_LARGE, BUILD\_GENERAL1\_2XLARGE. <br>BUILD\_GENERAL1\_SMALL is only valid if type is set to LINUX\_CONTAINER. When type is set to LINUX\_GPU\_CONTAINER, compute\_type must be BUILD\_GENERAL1\_LARGE | `string` | `"BUILD_GENERAL1_SMALL"` | no |
+| <a name="input_build_container_type"></a> [build\_container\_type](#input\_build\_container\_type) | Type of build environment to use for related builds. | `string` | `"LINUX_CONTAINER"` | no |
+| <a name="input_build_image"></a> [build\_image](#input\_build\_image) | Docker image to use for this build project. | `string` | `"aws/codebuild/amazonlinux2-x86_64-standard:3.0"` | no |
+| <a name="input_build_image_pull_credentials_type"></a> [build\_image\_pull\_credentials\_type](#input\_build\_image\_pull\_credentials\_type) | Type of credentials AWS CodeBuild uses to pull images in your build. Valid values: CODEBUILD, SERVICE\_ROLE. <br>When you use a cross-account or private registry image, you must use SERVICE\_ROLE credentials. <br>When you use an AWS CodeBuild curated image, you must use CodeBuild credentials. Defaults to CODEBUILD | `string` | `"CODEBUILD"` | no |
+| <a name="input_container_privileged_mode"></a> [container\_privileged\_mode](#input\_container\_privileged\_mode) | Whether to enable running the Docker daemon inside a Docker container. | `bool` | `true` | no |
 | <a name="input_file_artifacts"></a> [file\_artifacts](#input\_file\_artifacts) | Files to list in the artefacts > files section of the buildspec. | `list(string)` | `[]` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the build | `string` | n/a | yes |
 | <a name="input_role_arn"></a> [role\_arn](#input\_role\_arn) | The ARN of the IAM role to assume for the build | `string` | `""` | no |
