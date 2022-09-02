@@ -104,11 +104,11 @@ resource "aws_codebuild_project" "default" {
   service_role   = aws_iam_role.default.arn
 
   environment {
-    compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "aws/codebuild/amazonlinux2-x86_64-standard:4.0"
-    image_pull_credentials_type = "CODEBUILD"
-    privileged_mode             = true
-    type                        = "LINUX_CONTAINER"
+    compute_type                = var.build_container_type == "LINUX_GPU_CONTAINER" ? "BUILD_GENERAL1_LARGE" : var.build_compute_type
+    image                       = var.build_image
+    image_pull_credentials_type = var.build_image_pull_credentials_type
+    privileged_mode             = var.container_privileged_mode
+    type                        = var.build_container_type
   }
 
   artifacts {
