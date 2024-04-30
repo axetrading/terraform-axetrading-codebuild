@@ -51,6 +51,18 @@ data "aws_iam_policy_document" "default" {
     resources = [var.role_arn]
     effect    = "Allow"
   }
+  statement {
+    sid = "AllowKMS"
+    actions = [
+      "kms:Encrypt*",
+      "kms:Decrypt*",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:Describe*"
+    ]
+    effect    = "Allow"
+    resources = ["*"]
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "default" {
